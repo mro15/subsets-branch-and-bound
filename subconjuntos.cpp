@@ -5,13 +5,38 @@
 #include <list>
 #include <algorithm>
 
+typedef struct solution{
+    std::vector<int> subset;
+}solution;
+
+std::vector<int> v;
+float average;
+
+float calculate_average(int k){
+    float average=0;
+    for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
+        average+= *it;
+    }
+    return average/k;
+}
+int calculate_bound(solution s, int k){
+
+    for(int i=0; i<k; ++i){
+        for(std::vector<int>::iterator it = s.subset.begin(); it != s.subset.end(); ++it){
+            std::cout << *it << " " ;
+        }
+    }
+}
+
 void debug(std::vector<int> v){
-	std::cout << "[ " ;
+	std::cout << "DEBUG" << std::endl;
+    std::cout << "[ " ;
     for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
         std::cout << *it << " " ;
     }
 	std::cout << "] ";
 	std::cout << std::endl;
+	std::cout << "-------------------------------------------------" << std::endl;
 }
 
 int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets){
@@ -54,7 +79,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 int main(int argc, char *argv[]){
     std::fstream input;
     char *fileName;
-    int id=1, n , k;
+    int id=1, n , k, aux;
 	std::list<int> subsets;
 	std::vector<int> left;
     if(argc!=4){
@@ -72,13 +97,16 @@ int main(int argc, char *argv[]){
     }
     //TODO: guloso para achar um resultado bom pra começar o branch and bound
     //TODO: branch and bound (2 bounds)
-    int aux;
     while(id<=n){
 		input >> aux;
 		left.push_back(aux);
+        v.push_back(aux);
         id++;
     }
-    //Print vector
+    solution s[k];
+    average = calculate_average(k);
+    std::cout << "MEDIA " << average << std::endl;
+    //debug(v);
 	enumerate(left, n, k, 0, subsets);
     return 0;
 }
