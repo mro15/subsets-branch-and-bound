@@ -47,12 +47,13 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
         }
 		std::cout << "] ";
 		//debug(v);
-
+        //bound aqui
 		std::list<int>subsets2;
 		enumerate(v, v.size(), k-1, 0, subsets2, nodes);
 		std::cout << std::endl;
 		return 0;
 	}
+    //bound aqui
 	subsets.push_back(v.at(offset));
 	enumerate(v, n, k, offset+1, subsets, nodes);
 	subsets.remove(v.at(offset));
