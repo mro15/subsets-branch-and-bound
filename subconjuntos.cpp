@@ -7,10 +7,12 @@
 
 typedef struct solution{
     std::vector<int> subset;
+	float value;
 }solution;
 
 std::vector<int> v;
 float average;
+int n_s;
 
 float calculate_average(int k){
     float average=0;
@@ -19,13 +21,14 @@ float calculate_average(int k){
     }
     return average/k;
 }
-int calculate_bound(solution s, int k){
 
-    for(int i=0; i<k; ++i){
-        for(std::vector<int>::iterator it = s.subset.begin(); it != s.subset.end(); ++it){
-            std::cout << *it << " " ;
-        }
+float calculate_bound(solution s[], int k){
+	float bound = 0;
+    for(std::vector<int>::iterator it = s[k].subset.begin(); it != s[k].subset.end(); ++it){
+		bound+= *it;
     }
+	s[k].value = bound;
+	return bound;
 }
 
 void debug(std::vector<int> v){
@@ -39,40 +42,64 @@ void debug(std::vector<int> v){
 	std::cout << "-------------------------------------------------" << std::endl;
 }
 
-int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets){
-	if(k==0 || v.empty())
-		return 0;
-    if(k==1){
+void print_complete_solution(solution s[], int k){
+    for(int i=k; i>=1; --i){
+		std::cout << "K: " << i << " ";
+		std::cout <<  "[ ";
+        for(std::vector<int>::iterator it = s[i].subset.begin(); it != s[i].subset.end(); ++it){
+            std::cout << *it << " " ;
+        }
+		std::cout << " ]";
+	}
+	std::cout << std::endl;
+}
+
+void clear_solution(solution s[], int k){
+	s[k].subset.clear();
+}
+
+int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets, solution s[]){
+    if(k==1 || v.empty()){
+		clear_solution(s, k);
 		std::cout << "[ ";
   		for(std::vector<int>::iterator it=v.begin(); it!=v.end() ; it++){
         	std::cout << *it << " ";
+			s[k].subset.push_back(*it);
         }
 		std::cout << "] ";
 
+		std::cout << "FIM DA ENUMERACAO DO CONJUNTO: " << k << std::endl;
+		std::cout << "BOUND: " << calculate_bound(s, k) << std::endl;  
+		//std::cout << "SOLUTION" << std::endl;
+		//print_complete_solution(s, n_s);
         return 0;
     }
 	if(offset==n){
         if(subsets.empty()) return 0;
+		clear_solution(s, k);
 		std::cout << "[ ";
   		for(std::list<int>::iterator it=subsets.begin(); it!=subsets.end() ; ++it){
         	std::cout << *it << " ";
+			s[k].subset.push_back(*it);
 			std::vector<int>::iterator i = std::find(v.begin(), v.end(), *it);
 			size_t index = std::distance(v.begin(), i);
 			v.erase(v.begin() + index);
         }
 		std::cout << "] ";
+		std::cout << "FIM DA ENUMERACAO DO CONJUNTO: " << k << std::endl;
+		std::cout << "BOUND: " << calculate_bound(s, k) << std::endl;  
 		//debug(v);
         //bound aqui
 		std::list<int>subsets2;
-		enumerate(v, v.size(), k-1, 0, subsets2);
+		enumerate(v, v.size(), k-1, 0, subsets2, s);
 		std::cout << std::endl;
 		return 0;
 	}
     //bound aqui
 	subsets.push_back(v.at(offset));
-	enumerate(v, n, k, offset+1, subsets);
+	enumerate(v, n, k, offset+1, subsets, s);
 	subsets.remove(v.at(offset));
-	enumerate(v, n, k, offset+1, subsets);
+	enumerate(v, n, k, offset+1, subsets, s);
 	return 0;
 }
 
@@ -103,10 +130,11 @@ int main(int argc, char *argv[]){
         v.push_back(aux);
         id++;
     }
-    solution s[k];
+    solution s[k+1];
+	n_s = k;
     average = calculate_average(k);
     std::cout << "MEDIA " << average << std::endl;
     //debug(v);
-	enumerate(left, n, k, 0, subsets);
+	enumerate(left, n, k, 0, subsets, s);
     return 0;
 }
