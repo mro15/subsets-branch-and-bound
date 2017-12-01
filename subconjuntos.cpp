@@ -60,15 +60,15 @@ void clear_solution(solution s[], int k){
 	s[k].subset.clear();
 }
 
-int cut(float bound){
-    if(bound>average){
+int cut(solution s[], int k, int n){
+
+    /*if(biound<int(average)){
         return 1;
-    }
+    }*/
     return 0;
 }
 
 int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets, solution s[]){
-    float partial_bound;
     if(k==1 || v.empty()){
 		clear_solution(s, k);
 		//std::cout << "[ ";
@@ -78,9 +78,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
         }
 		//std::cout << "] ";
 
-        partial_bound = calculate_bound(s, k);
-		std::cout << "BOUND: " << partial_bound << std::endl;
-        if(cut(partial_bound)){
+        if(cut(s, k, n)){
             std::cout << "CUT" << std::endl;
             return 0;
         }
@@ -100,9 +98,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			v.erase(v.begin() + index);
         }
 		//std::cout << "] ";
-        partial_bound = calculate_bound(s, k);
-		std::cout << "BOUND: " << partial_bound << std::endl;
-        if(cut(partial_bound)){
+        if(cut(s, k, n)){
             std::cout << "CUT" << std::endl;
             return 0;
         }
