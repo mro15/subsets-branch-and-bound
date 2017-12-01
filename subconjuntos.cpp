@@ -60,7 +60,24 @@ void clear_solution(solution s[], int k){
 	s[k].subset.clear();
 }
 
-int cut(solution s[], int k, int n, std::vector<int> v){
+int cut2(solution s[], int k, std::vector<int> v){ 
+	float f1 = calculate_bound(s, k), sum = 0, f2;
+	if(k!=1){	
+    	for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
+      		sum+=*it;
+    	}
+		f2=sum/k-1;
+	}else{
+		f2 = 0;
+	}
+	float f = std::max(f1, f2);
+	if(f1 < f2)
+		return 1;
+	return 0;
+	
+}
+
+int cut(solution s[], int k, std::vector<int> v){
 	float f1 = calculate_bound(s, k);
 	float sum = 0, f2, f;
     /*for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
@@ -73,7 +90,7 @@ int cut(solution s[], int k, int n, std::vector<int> v){
     return 0;
 }
 
-int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets, solution s[]){
+int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets, solution s[], int o_k){
     if(k==1 || v.empty()){
 		clear_solution(s, k);
 		//std::cout << "[ ";
@@ -82,8 +99,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			s[k].subset.push_back(*it);
         }
 		//std::cout << "] ";
-		std::cout << "hsudhs" << std::endl;
-        if(cut(s, k, n, v)){
+        if(cut(s, k, v)){
             std::cout << "CUT" << std::endl;
             return 0;
         }
@@ -103,7 +119,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			v.erase(v.begin() + index);
         }
 		//std::cout << "] ";
-        if(cut(s, k, n, v)){
+        if(cut(s, k, v)){
             std::cout << "CUT" << std::endl;
             return 0;
         }
@@ -111,15 +127,15 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 		//debug(v);
         //bound aqui
 		std::list<int>subsets2;
-		enumerate(v, v.size(), k-1, 0, subsets2, s);
+		enumerate(v, v.size(), k-1, 0, subsets2, s, o_k);
 		std::cout << std::endl;
 		return 0;
 	}
     //bound aqui
 	subsets.push_back(v.at(offset));
-	enumerate(v, n, k, offset+1, subsets, s);
+	enumerate(v, n, k, offset+1, subsets, s, o_k);
 	subsets.remove(v.at(offset));
-	enumerate(v, n, k, offset+1, subsets, s);
+	enumerate(v, n, k, offset+1, subsets, s, o_k);
 	return 0;
 }
 
@@ -155,6 +171,6 @@ int main(int argc, char *argv[]){
     average = calculate_average(k);
     std::cout << "MEDIA " << average << std::endl;
     //debug(v);
-	enumerate(left, n, k, 0, subsets, s);
+	enumerate(left, n, k, 0, subsets, s, k);
     return 0;
 }
