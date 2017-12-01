@@ -43,6 +43,7 @@ void debug(std::vector<int> v){
 }
 
 void print_complete_solution(solution s[], int k){
+    std::cout << "--------------------------------------------" << std::endl;
     for(int i=k; i>=1; --i){
 		std::cout << "K: " << i << " ";
 		std::cout <<  "[ ";
@@ -51,6 +52,7 @@ void print_complete_solution(solution s[], int k){
         }
 		std::cout << " ]";
 	}
+    std::cout << std::endl << "--------------------------------------------" << std::endl;
 	std::cout << std::endl;
 }
 
@@ -58,36 +60,53 @@ void clear_solution(solution s[], int k){
 	s[k].subset.clear();
 }
 
+int cut(float bound){
+    if(bound>average){
+        return 1;
+    }
+    return 0;
+}
+
 int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets, solution s[]){
+    float partial_bound;
     if(k==1 || v.empty()){
 		clear_solution(s, k);
-		std::cout << "[ ";
+		//std::cout << "[ ";
   		for(std::vector<int>::iterator it=v.begin(); it!=v.end() ; it++){
-        	std::cout << *it << " ";
+        	//std::cout << *it << " ";
 			s[k].subset.push_back(*it);
         }
-		std::cout << "] ";
+		//std::cout << "] ";
 
-		std::cout << "FIM DA ENUMERACAO DO CONJUNTO: " << k << std::endl;
-		std::cout << "BOUND: " << calculate_bound(s, k) << std::endl;  
-		//std::cout << "SOLUTION" << std::endl;
-		//print_complete_solution(s, n_s);
+        partial_bound = calculate_bound(s, k);
+		std::cout << "BOUND: " << partial_bound << std::endl;
+        if(cut(partial_bound)){
+            std::cout << "CUT" << std::endl;
+            return 0;
+        }
+        std::cout << "DONT CUT" << std::endl;
+		print_complete_solution(s, n_s);
         return 0;
     }
 	if(offset==n){
         if(subsets.empty()) return 0;
 		clear_solution(s, k);
-		std::cout << "[ ";
+		//std::cout << "[ ";
   		for(std::list<int>::iterator it=subsets.begin(); it!=subsets.end() ; ++it){
-        	std::cout << *it << " ";
+        	//std::cout << *it << " ";
 			s[k].subset.push_back(*it);
 			std::vector<int>::iterator i = std::find(v.begin(), v.end(), *it);
 			size_t index = std::distance(v.begin(), i);
 			v.erase(v.begin() + index);
         }
-		std::cout << "] ";
-		std::cout << "FIM DA ENUMERACAO DO CONJUNTO: " << k << std::endl;
-		std::cout << "BOUND: " << calculate_bound(s, k) << std::endl;  
+		//std::cout << "] ";
+        partial_bound = calculate_bound(s, k);
+		std::cout << "BOUND: " << partial_bound << std::endl;
+        if(cut(partial_bound)){
+            std::cout << "CUT" << std::endl;
+            return 0;
+        }
+        std::cout << "DONT CUT" << std::endl;
 		//debug(v);
         //bound aqui
 		std::list<int>subsets2;
