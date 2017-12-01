@@ -60,11 +60,16 @@ void clear_solution(solution s[], int k){
 	s[k].subset.clear();
 }
 
-int cut(solution s[], int k, int n){
-
-    /*if(biound<int(average)){
-        return 1;
+int cut(solution s[], int k, int n, std::vector<int> v){
+	float f1 = calculate_bound(s, k);
+	float sum = 0, f2, f;
+    /*for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
+      	sum+=*it;
     }*/
+	//f2=sum/k-1;
+    if(f1<int(average)){
+        return 1;
+    }
     return 0;
 }
 
@@ -77,8 +82,8 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			s[k].subset.push_back(*it);
         }
 		//std::cout << "] ";
-
-        if(cut(s, k, n)){
+		std::cout << "hsudhs" << std::endl;
+        if(cut(s, k, n, v)){
             std::cout << "CUT" << std::endl;
             return 0;
         }
@@ -98,7 +103,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			v.erase(v.begin() + index);
         }
 		//std::cout << "] ";
-        if(cut(s, k, n)){
+        if(cut(s, k, n, v)){
             std::cout << "CUT" << std::endl;
             return 0;
         }
