@@ -13,6 +13,7 @@ typedef struct solution{
 std::vector<int> v;
 float average;
 int n_s;
+int n_cut = 0;
 
 float calculate_average(int k){
     float average=0;
@@ -80,11 +81,18 @@ int cut2(solution s[], int k, std::vector<int> v){
 int cut(solution s[], int k, std::vector<int> v){
 	float f1 = calculate_bound(s, k);
 	float sum = 0, f2, f;
-    /*for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
-      	sum+=*it;
-    }*/
-	//f2=sum/k-1;
-    if(f1<int(average)){
+	if(v.empty() && k>1)
+		return 1;
+	if(k==1)
+		f = average;
+	else{
+    	for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
+      		sum+=*it;
+    	}
+		f2=sum/k-1;
+		f = std::min(average, f2);
+	}
+    if(f1<int(f)){
         return 1;
     }
     return 0;
@@ -100,10 +108,11 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
         }
 		//std::cout << "] ";
         if(cut(s, k, v)){
+			n_cut++;
             std::cout << "CUT" << std::endl;
             return 0;
         }
-        std::cout << "DONT CUT" << std::endl;
+        std::cout << "DONT CUT solution" << std::endl;
 		print_complete_solution(s, n_s);
         return 0;
     }
@@ -120,6 +129,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
         }
 		//std::cout << "] ";
         if(cut(s, k, v)){
+			n_cut++;
             std::cout << "CUT" << std::endl;
             return 0;
         }
@@ -172,5 +182,6 @@ int main(int argc, char *argv[]){
     std::cout << "MEDIA " << average << std::endl;
     //debug(v);
 	enumerate(left, n, k, 0, subsets, s, k);
+	std::cout << n_cut << std::endl;
     return 0;
 }
