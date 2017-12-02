@@ -183,15 +183,31 @@ int main(int argc, char *argv[]){
     while(id<=n){
 		input >> aux;
 		left.push_back(aux);
-        v.push_back(aux);
+		v.push_back(aux);
         id++;
     }
 	n_s = k;
     solution s[k+1];
 	solution best[k+1];
     average = calculate_average(k);
+	//vector is in the order of entry
 	enumerate(left, n, k, 0, subsets, s, best);
 	//print best solution
+	std::cout << "Melhor solucao na ordem de entrada" << std::endl;
 	print_complete_solution(best, n_s);
+	std::cout << "Numero de nos cortados: " << n_cut << std::endl;
+	//sort vector
+	std::sort(v.begin(), v.end());
+	//clear old solutions
+	for(int i=1; i<=k; ++i){
+		clear_solution(s, k);
+		clear_solution(best, k);
+	}
+	//clear number of cut nodes
+	n_cut = 0;
+	enumerate(v, n, k, 0, subsets, s, best);
+	std::cout << "Melhor solucao na ordem crescente" << std::endl;
+	print_complete_solution(best, n_s);
+	std::cout << "Numero de nos cortados: " << n_cut << std::endl;
     return 0;
 }
