@@ -4,6 +4,7 @@
 #include <fstream>
 #include <list>
 #include <algorithm>
+#include <cmath>
 
 typedef struct solution{
     std::vector<int> subset;
@@ -12,8 +13,7 @@ typedef struct solution{
 
 std::vector<int> v;
 float average;
-int n_s;
-int n_cut = 0;
+int n_cut = 0, n_s;
 
 float calculate_average(int k){
     float average=0;
@@ -78,6 +78,32 @@ int cut2(solution s[], int k, std::vector<int> v){
 	
 }
 
+void evaluate_solution(solution s[], solution best[], int k){
+	int sum1 = 0, sum2 = 0;
+	//if solution is null, the found solution is the best
+	if(best[k].subset.empty()){
+		for(int i=1; i<=k; ++i){
+			best[i].subset.assign(s[i].subset.begin(), s[i].subset.end());
+			best[i].value = s[i].value;
+		}
+	}else{
+		//else, get the sum of the candidate solution and best solution.
+		// if the candidate solution is better than best, candidate will
+		//become the new best.
+		for(int i=1; i<=k-1; ++i){
+			sum1 += std::abs(s[i].value - s[i+1].value);
+			sum2 += std::abs(best[i].value - best[i+1].value);
+		}
+		if(sum1<sum2){
+			for(int i=1; i<=k; ++i){
+				best[i].subset.assign(s[i].subset.begin(), s[i].subset.end());
+				best[i].value = s[i].value;
+			}
+		}
+	}
+	return;
+}
+
 int cut(solution s[], int k, std::vector<int> v){
 	float f1 = calculate_bound(s, k);
 	float sum = 0, f2, f;
@@ -98,54 +124,40 @@ int cut(solution s[], int k, std::vector<int> v){
     return 0;
 }
 
-int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets, solution s[], int o_k){
+int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subsets, solution s[], solution best[]){
     if(k==1 || v.empty()){
 		clear_solution(s, k);
-		//std::cout << "[ ";
   		for(std::vector<int>::iterator it=v.begin(); it!=v.end() ; it++){
-        	//std::cout << *it << " ";
 			s[k].subset.push_back(*it);
         }
-		//std::cout << "] ";
         if(cut(s, k, v)){
 			n_cut++;
-            std::cout << "CUT" << std::endl;
             return 0;
         }
-        std::cout << "DONT CUT solution" << std::endl;
-		print_complete_solution(s, n_s);
+		evaluate_solution(s, best, n_s);
         return 0;
     }
 	if(offset==n){
         if(subsets.empty()) return 0;
 		clear_solution(s, k);
-		//std::cout << "[ ";
   		for(std::list<int>::iterator it=subsets.begin(); it!=subsets.end() ; ++it){
-        	//std::cout << *it << " ";
 			s[k].subset.push_back(*it);
 			std::vector<int>::iterator i = std::find(v.begin(), v.end(), *it);
 			size_t index = std::distance(v.begin(), i);
 			v.erase(v.begin() + index);
         }
-		//std::cout << "] ";
         if(cut(s, k, v)){
 			n_cut++;
-            std::cout << "CUT" << std::endl;
             return 0;
         }
-        std::cout << "DONT CUT" << std::endl;
-		//debug(v);
-        //bound aqui
 		std::list<int>subsets2;
-		enumerate(v, v.size(), k-1, 0, subsets2, s, o_k);
-		std::cout << std::endl;
+		enumerate(v, v.size(), k-1, 0, subsets2, s, best);
 		return 0;
 	}
-    //bound aqui
 	subsets.push_back(v.at(offset));
-	enumerate(v, n, k, offset+1, subsets, s, o_k);
+	enumerate(v, n, k, offset+1, subsets, s, best);
 	subsets.remove(v.at(offset));
-	enumerate(v, n, k, offset+1, subsets, s, o_k);
+	enumerate(v, n, k, offset+1, subsets, s, best);
 	return 0;
 }
 
@@ -168,20 +180,18 @@ int main(int argc, char *argv[]){
         std::cout << "Nao foi possivel abrir o arquivo" << std::endl;
         return 0;
     }
-    //TODO: guloso para achar um resultado bom pra começar o branch and bound
-    //TODO: branch and bound (2 bounds)
     while(id<=n){
 		input >> aux;
 		left.push_back(aux);
         v.push_back(aux);
         id++;
     }
-    solution s[k+1];
 	n_s = k;
+    solution s[k+1];
+	solution best[k+1];
     average = calculate_average(k);
-    std::cout << "MEDIA " << average << std::endl;
-    //debug(v);
-	enumerate(left, n, k, 0, subsets, s, k);
-	std::cout << n_cut << std::endl;
+	enumerate(left, n, k, 0, subsets, s, best);
+	//print best solution
+	print_complete_solution(best, n_s);
     return 0;
 }
