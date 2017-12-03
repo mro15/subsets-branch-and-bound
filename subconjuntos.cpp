@@ -155,16 +155,19 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 int main(int argc, char *argv[]){
     std::fstream input;
     char *fileName;
-    int id=1, n , k, aux;
+    int id=1, n , k, aux, order;
 	std::list<int> subsets;
 	std::vector<int> left;
-    if(argc!=4){
-        std::cout << "Uso: ./subconjuntos <n> <k> <arquivo de entrada>" << std::endl;
+    if(argc!=5){
+        std::cout << "Uso: ./subconjuntos <n> <k> <arquivo de entrada> <ordem>" << std::endl;
+		std::cout << "1: ordem de entrada" << std::endl;
+		std::cout << "2: ordem crescente" << std::endl;
         return 0;
     }else{
 		n = atoi(argv[1]);
 		k = atoi(argv[2]);
         fileName = argv[3];
+		order = atoi(argv[4]);
     }
     input.open(fileName, std::ifstream::in);
     if(!input.good()) {
@@ -181,29 +184,20 @@ int main(int argc, char *argv[]){
     solution s[k+1];
 	solution best[k+1];
     average = calculate_average(k);
-	//vector is in the order of entry
-	enumerate(left, n, k, 0, subsets, s, best);
-	//print best solution
-	std::cout << "Melhor solucao na ordem de entrada" << std::endl;
-	print_complete_solution(best, n_s);
-	std::cout << "Numero de nos cortados: " << n_cut << std::endl;
-	//sort vector
-	std::sort(v.begin(), v.end());
-	//clear old solutions
-	for(int i=1; i<=k; ++i){
-		clear_solution(s, k);
-		clear_solution(best, k);
-	}
-	//clear number of cut nodes
-	n_cut = 0;
-	enumerate(v, n, k, 0, subsets, s, best);
-	std::cout << "Melhor solucao na ordem crescente" << std::endl;
-	print_complete_solution(best, n_s);
-	std::cout << "Numero de nos cortados: " << n_cut << std::endl;
-	//Bound 2
-	min = *std::min_element(v.begin(), v.end());
-	std::cout << "Menor elemento do vetor: " << min << std::endl;
-	//enumerate(left, n, k, 0, subsets, s, best);
-	
+	if(order==1){
+		//vector is in the order of entry
+		enumerate(left, n, k, 0, subsets, s, best);
+		//print best solution
+		std::cout << "Melhor solucao na ordem de entrada" << std::endl;
+		print_complete_solution(best, n_s);
+		std::cout << "Numero de nos cortados: " << n_cut << std::endl;
+	}else{
+		//sort vector
+		std::sort(v.begin(), v.end());
+		enumerate(v, n, k, 0, subsets, s, best);
+		std::cout << "Melhor solucao na ordem crescente" << std::endl;
+		print_complete_solution(best, n_s);
+		std::cout << "Numero de nos cortados: " << n_cut << std::endl;
+	}	
     return 0;
 }
