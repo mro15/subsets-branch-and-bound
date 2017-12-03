@@ -121,7 +121,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
   		for(std::vector<int>::iterator it=v.begin(); it!=v.end() ; it++){
 			s[k].subset.push_back(*it);
         }
-        if(cut2(s, k)){
+        if(cut(s, k, v)){
 	    n_cut++;
             return 0;
         }
@@ -137,7 +137,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			size_t index = std::distance(v.begin(), i);
 			v.erase(v.begin() + index);
         }
-        if(cut2(s, k)){
+        if(cut(s, k, v)){
 	    n_cut++;
             return 0;
         }
