@@ -1,0 +1,10 @@
+Melhor solucao na ordem de entrada
+--------------------------------------------
+K: 2 [ 908 86 314  ]K: 1 [ 365 953  ]
+--------------------------------------------
+
+Numero de nos cortados: 23
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
