@@ -13,7 +13,7 @@ typedef struct solution{
 
 std::vector<int> v;
 float average;
-int n_cut = 0, n_s;
+int n_cut = 0, n_s, min;
 
 float calculate_average(int k){
     float average=0;
@@ -61,18 +61,9 @@ void clear_solution(solution s[], int k){
 	s[k].subset.clear();
 }
 
-int cut2(solution s[], int k, std::vector<int> v){ 
-	float f1 = calculate_bound(s, k), sum = 0, f2;
-	if(k!=1){	
-    	for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it){
-      		sum+=*it;
-    	}
-		f2=sum/k-1;
-	}else{
-		f2 = 0;
-	}
-	float f = std::max(f1, f2);
-	if(f1 < f2)
+int cut2(solution s[], int k){ 
+	float f1 = calculate_bound(s, k);
+	if(f1 < min)
 		return 1;
 	return 0;
 	
@@ -130,8 +121,8 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
   		for(std::vector<int>::iterator it=v.begin(); it!=v.end() ; it++){
 			s[k].subset.push_back(*it);
         }
-        if(cut(s, k, v)){
-			n_cut++;
+        if(cut2(s, k)){
+	    n_cut++;
             return 0;
         }
 		evaluate_solution(s, best, n_s);
@@ -146,8 +137,8 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			size_t index = std::distance(v.begin(), i);
 			v.erase(v.begin() + index);
         }
-        if(cut(s, k, v)){
-			n_cut++;
+        if(cut2(s, k)){
+	    n_cut++;
             return 0;
         }
 		std::list<int>subsets2;
@@ -209,5 +200,10 @@ int main(int argc, char *argv[]){
 	std::cout << "Melhor solucao na ordem crescente" << std::endl;
 	print_complete_solution(best, n_s);
 	std::cout << "Numero de nos cortados: " << n_cut << std::endl;
+	//Bound 2
+	min = *std::min_element(v.begin(), v.end());
+	std::cout << "Menor elemento do vetor: " << min << std::endl;
+	//enumerate(left, n, k, 0, subsets, s, best);
+	
     return 0;
 }
