@@ -138,7 +138,7 @@ int enumerate(std::vector<int> v, int n, int k, int offset, std::list<int> &subs
 			v.erase(v.begin() + index);
         }
         if(cut(s, k, v)){
-	    n_cut++;
+	    	n_cut++;
             return 0;
         }
 		std::list<int>subsets2;

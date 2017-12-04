@@ -1,0 +1,10 @@
+Melhor solucao na ordem crescente
+--------------------------------------------
+K: 5 [  ]K: 4 [  ]K: 3 [  ]K: 2 [  ]K: 1 [  ]
+--------------------------------------------
+
+Numero de nos cortados: 259
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
