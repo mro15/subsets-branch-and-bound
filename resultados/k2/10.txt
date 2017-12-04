@@ -19,6 +19,8 @@ i
 696 0.004
 j
 730 0.003
+media de cortes = 712.9
+media de tempo = 0.0035
 k=10 ordenacao 2
 a
 697 0.003
@@ -40,3 +42,5 @@ i
 696 0.003
 j
 730 0.003
+media de cortes = 712.9
+media de tempo =0.0031

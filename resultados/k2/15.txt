@@ -19,7 +19,8 @@ i
 21453 0.104
 j
 20900 0.105
-
+media de cortes=19022.9
+media de tempo=0.1047
 k=15 ordenação=2
 a
 20906 0.104
@@ -41,3 +42,5 @@ i
 21453 0.104
 j
 20900 0.104
+media de cortes=19022.9
+media de tempo=0.104

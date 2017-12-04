@@ -19,6 +19,9 @@ i
 19562673 2m38.147
 j
 19064093 2m38.716
+media de cortes=19368628
+media de tempo=2m36s
+k=25 ordem=2
 a
 19263104 2m38.954
 b
@@ -39,3 +42,5 @@ i
 19562673 2m38.496
 j
 19064093 2m39.059
+media de cortes=19368628
+media de tempo=2m39s

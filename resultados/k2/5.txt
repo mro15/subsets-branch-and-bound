@@ -1,4 +1,4 @@
-k=5 ordenação=1
+k=2 ordenação=1
 a
 22 0.001
 b
@@ -19,7 +19,9 @@ i
 24 0.004
 j
 24 0.001
-k=5 odenação=2
+media de cortes=23.5
+media de tempo=0.0013
+k=2 odenação=2
 a
 22 0.001
 b
@@ -40,3 +42,5 @@ i
 24 0.001
 j
 24 0.001  
+media de cortes=23.5
+media de tempo=0.001

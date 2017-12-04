@@ -19,7 +19,8 @@ i
 159284 0.947
 j
 162913 0.946
-
+media de cortes=160028.2
+media de tempo=0.9505
 k=18 ordenação=2
 a
 160248 0.953
@@ -41,3 +42,5 @@ i
 159284 0.955
 j
 162913 0.950
+media de cortes=160028.2
+media de tempo=0.9508
