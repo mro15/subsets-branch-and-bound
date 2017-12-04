@@ -1,0 +1,46 @@
+k=5 ordem=1
+a
+259 0m0.002s
+b
+229 0m0.001s
+c
+299 0m0.002s
+d
+175 0m0.001s
+e
+285 0m0.002s
+f
+431 0m0.002s
+g
+383 0m0.002s
+h
+317 0m0.002s
+i
+245 0m0.001s
+j
+227 0m0.001s
+media de cortes=285
+media de tempo=0.001
+k=5 ordem=2
+a
+259 0m0.002s
+b
+229 0m0.002s
+c
+299 0m0.002s
+d
+175 0m0.001s
+e
+285 0m0.001s
+f
+431 0m0.002s
+g
+383 0m0.002s
+h
+317 0m0.002s
+i
+245 0m0.001s
+j
+227 0m0.001s
+media de cortes=285
+media de tempo=0.001
