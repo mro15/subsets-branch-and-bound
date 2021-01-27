@@ -1,4 +1,2 @@
-## Quarto Trabalho de Tópicos em Algoritmos
-## Problema: Particionamento de um conjunto em subconjuntos balanceados
-## Aluna: Marcela Ribeiro de Oliveira
+### Implementação utilizando a técnica de branch and bound para o problema de particionamento de um conjunto em subconjuntos balanceados
 
